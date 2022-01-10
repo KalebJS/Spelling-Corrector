@@ -2,6 +2,7 @@ package corrector;
 
 import mapping.Trie;
 import scanner.DictionaryScanner;
+import spell.INode;
 import spell.ISpellCorrector;
 
 import java.io.IOException;
@@ -78,18 +79,14 @@ public class SpellCorrector implements ISpellCorrector {
 
     @Override
     public String suggestSimilarWord(String inputWord) {
-        final int MAX_EDIT_DISTANCE = 1;
+        final int MAX_EDIT_DISTANCE = 2;
         Vector<String> candidates = new Vector<>(1);
         candidates.add(inputWord);
         for (int i = 0; i < MAX_EDIT_DISTANCE; i++) {
             Vector<String> deletionVariants = getDeletionVariants(candidates);
-//            System.out.println("Deletion variants: " + deletionVariants.size());
             Vector<String> transpositionVariants = getTranspositionVariants(candidates);
-//            System.out.println("Transposition variants: " + transpositionVariants.size());
             Vector<String> alterationVariants = getAlterationVariants(candidates);
-//            System.out.println("Alteration variants: " + alterationVariants.size());
             Vector<String> insertionVariants = getInsertionVariants(candidates);
-//            System.out.println("Insertion variants: " + insertionVariants.size());
 
             candidates.clear();
 
@@ -97,8 +94,26 @@ public class SpellCorrector implements ISpellCorrector {
             candidates.addAll(transpositionVariants);
             candidates.addAll(alterationVariants);
             candidates.addAll(insertionVariants);
-//            System.out.println("Candidates: " + candidates.size());
+            candidates.sort(String::compareTo);
 
+            Vector<String> matches = new Vector<>();
+            for (String candidate : candidates) {
+                if (dictionary.find(candidate) != null) {
+                    matches.add(candidate);
+                }
+            }
+            if (matches.size() > 0) {
+                String topMatch = matches.get(0);
+                INode topMatchNode = dictionary.find(matches.get(0));
+                for (String match : matches) {
+                    INode matchNode = dictionary.find(match);
+                    if (matchNode.getValue() > topMatchNode.getValue()) {
+                        topMatch = match;
+                        topMatchNode = matchNode;
+                    }
+                }
+                return topMatch;
+            }
         }
         return null;
     }

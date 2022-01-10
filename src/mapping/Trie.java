@@ -4,7 +4,7 @@ import spell.INode;
 import spell.ITrie;
 
 public class Trie implements ITrie {
-    private Node root;
+    private final Node root;
     private int wordCount;
 
     public Trie() {
@@ -44,8 +44,9 @@ public class Trie implements ITrie {
         return nodeCount;
     }
 
+    @Override
     public String toString() {
-        // TODO
+        
         return "Trie";
     }
 
