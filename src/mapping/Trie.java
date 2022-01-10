@@ -5,40 +5,43 @@ import spell.ITrie;
 
 public class Trie implements ITrie {
     private Node root;
+    private int wordCount;
 
-    private void constructTrie() {
-        // TODO
+    public Trie() {
+        root = new Node();
+        wordCount = 0;
     }
 
     public void add(String word) {
-        // TODO
-        Node current = root;
-//        for (int i = 0; i < word.length(); i++) {
-//            char c = word.charAt(i);
-//            if (!current.containsChild(c)) {
-//                current.addChild(c);
-//            }
-//            current = current.getChild(c);
-//        }
-//        current.setEndOfWord(true);
+        root.add(word);
+        wordCount++;
     }
 
     @Override
     public INode find(String word) {
-        // TODO
-        return null;
+        Node current = root;
+        for (int i = 0; i < word.length(); i++) {
+            char c = word.charAt(i);
+            int index = c - 'a';
+            if (current.getChildren()[index] == null) {
+                return null;
+            } else {
+                current = current.children[index];
+            }
+        }
+        return current;
     }
 
     @Override
     public int getWordCount() {
-        // TODO
-        return 0;
+        return wordCount;
     }
 
     @Override
     public int getNodeCount() {
-        // TODO
-        return 0;
+        int nodeCount = 1;
+        nodeCount += root.getChildNodeCount();
+        return nodeCount;
     }
 
     public String toString() {
