@@ -1,2 +1,0 @@
-# Spelling Corrector
- 
