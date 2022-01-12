@@ -25,6 +25,8 @@ public class SpellCorrector implements ISpellCorrector {
             String word = scanner.nextWord();
             dictionary.add(word);
         }
+
+        System.out.println(dictionary.getWordCount() + " words loaded.");
     }
 
     private Vector<String> getDeletionVariants(Vector<String> candidates) {

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import spell.ITrie;
-import spell.Trie;
+import mapping.Trie;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

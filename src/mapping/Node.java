@@ -2,6 +2,8 @@ package mapping;
 
 import spell.INode;
 
+import java.util.Vector;
+
 public class Node implements INode {
     private int frequency;
     public Node[] children;
@@ -46,6 +48,53 @@ public class Node implements INode {
             if (this.children[i] != null) {
                 count++;
                 count += this.children[i].getChildNodeCount();
+            }
+        }
+        return count;
+    }
+
+    public void generateString(Vector<String> stringVector, String word) {
+        if (this.getValue() > 0) {
+            stringVector.add(word);
+            if (this.getChildNodeCount() == 0) {
+                return;
+            }
+        }
+        for (int i = 0; i < 26; i++) {
+            Node child = this.children[i];
+            if (child != null) {
+                child.generateString(stringVector, word + (char) ('a' + i));
+            }
+        }
+    }
+
+    public boolean equals(Node otherNode) {
+        for (int i = 0; i < 26; i++) {
+            Node child = this.children[i];
+            Node otherChild = otherNode.children[i];
+            if ((child != null && otherChild == null) || (child == null && otherChild != null)) {
+                return false;
+            } else if (child != null) {
+                if (child.getValue() != otherChild.getValue()) {
+                    return false;
+                }
+                if (!child.equals(otherChild)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public int getWordCount() {
+        int count = 0;
+        if (this.getValue() > 0) {
+            count++;
+        }
+        for (int i = 0; i < 26; i++) {
+            Node child = this.children[i];
+            if (child != null) {
+                count += child.getWordCount();
             }
         }
         return count;

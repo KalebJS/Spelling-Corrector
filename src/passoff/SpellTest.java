@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import spell.ISpellCorrector;
-import spell.SpellCorrector;
+import corrector.SpellCorrector;
 
 import java.io.IOException;
 

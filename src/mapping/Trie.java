@@ -3,6 +3,9 @@ package mapping;
 import spell.INode;
 import spell.ITrie;
 
+import java.util.Set;
+import java.util.Vector;
+
 public class Trie implements ITrie {
     private final Node root;
     private int wordCount;
@@ -14,7 +17,6 @@ public class Trie implements ITrie {
 
     public void add(String word) {
         root.add(word);
-        wordCount++;
     }
 
     @Override
@@ -34,7 +36,7 @@ public class Trie implements ITrie {
 
     @Override
     public int getWordCount() {
-        return wordCount;
+        return root.getWordCount();
     }
 
     @Override
@@ -46,18 +48,39 @@ public class Trie implements ITrie {
 
     @Override
     public String toString() {
-        
-        return "Trie";
+        Vector<String> stringVector = new Vector<>();
+        root.generateString(stringVector, "");
+        StringBuilder outputString = new StringBuilder();
+        for (String s : stringVector) {
+            outputString.append(s).append("\n");
+        }
+        return outputString.toString();
     }
 
     @Override
     public int hashCode() {
-        // TODO
-        return 0;
+        INode[] children = root.getChildren();
+        int first_index = 0;
+        for (int i = 0; i < 26; i++) {
+            if (children[i] != null) {
+                first_index = i;
+                break;
+            }
+        }
+        int numNodes = this.getNodeCount();
+        int wordCount = this.getWordCount();
+        return first_index * numNodes * wordCount;
     }
 
-    public boolean equals(Object o) {
-        // TODO
-        return true;
+    public boolean equals(Trie otherTrie) {
+        if (otherTrie == null) {
+            return false;
+        }
+
+        if (this == otherTrie) {
+            return true;
+        }
+
+        return root.equals(otherTrie.root);
     }
 }
