@@ -7,6 +7,7 @@ import spell.ISpellCorrector;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Locale;
 import java.util.Vector;
 
 public class SpellCorrector implements ISpellCorrector {
@@ -81,9 +82,14 @@ public class SpellCorrector implements ISpellCorrector {
 
     @Override
     public String suggestSimilarWord(String inputWord) {
+        String word = inputWord.toLowerCase(Locale.ENGLISH);
+        if (dictionary.find(word) != null) {
+            return word;
+        }
+
         final int MAX_EDIT_DISTANCE = 2;
         Vector<String> candidates = new Vector<>(1);
-        candidates.add(inputWord);
+        candidates.add(word);
         for (int i = 0; i < MAX_EDIT_DISTANCE; i++) {
             Vector<String> deletionVariants = getDeletionVariants(candidates);
             Vector<String> transpositionVariants = getTranspositionVariants(candidates);

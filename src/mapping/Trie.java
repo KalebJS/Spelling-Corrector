@@ -3,9 +3,6 @@ package mapping;
 import spell.INode;
 import spell.ITrie;
 
-import java.util.Set;
-import java.util.Vector;
-
 public class Trie implements ITrie {
     private final Node root;
     private int wordCount;
@@ -15,6 +12,7 @@ public class Trie implements ITrie {
         wordCount = 0;
     }
 
+    @Override
     public void add(String word) {
         root.add(word);
     }
@@ -31,7 +29,11 @@ public class Trie implements ITrie {
                 current = current.children[index];
             }
         }
-        return current;
+        if (current.getValue() > 0) {
+            return current;
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -48,12 +50,8 @@ public class Trie implements ITrie {
 
     @Override
     public String toString() {
-        Vector<String> stringVector = new Vector<>();
-        root.generateString(stringVector, "");
         StringBuilder outputString = new StringBuilder();
-        for (String s : stringVector) {
-            outputString.append(s).append("\n");
-        }
+        root.generateString(outputString, "");
         return outputString.toString();
     }
 
@@ -72,7 +70,12 @@ public class Trie implements ITrie {
         return first_index * numNodes * wordCount;
     }
 
-    public boolean equals(Trie otherTrie) {
+    public Node getRoot() {
+        return root;
+    }
+
+    @Override
+    public boolean equals(Object otherTrie) {
         if (otherTrie == null) {
             return false;
         }
@@ -81,6 +84,7 @@ public class Trie implements ITrie {
             return true;
         }
 
-        return root.equals(otherTrie.root);
+        Node otherRoot = ((Trie) otherTrie).getRoot();
+        return root.equalsHelper(otherRoot);
     }
 }

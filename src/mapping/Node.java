@@ -2,8 +2,6 @@ package mapping;
 
 import spell.INode;
 
-import java.util.Vector;
-
 public class Node implements INode {
     private int frequency;
     public Node[] children;
@@ -53,9 +51,9 @@ public class Node implements INode {
         return count;
     }
 
-    public void generateString(Vector<String> stringVector, String word) {
+    public void generateString(StringBuilder stringBuilder, String word) {
         if (this.getValue() > 0) {
-            stringVector.add(word);
+            stringBuilder.append(word).append("\n");
             if (this.getChildNodeCount() == 0) {
                 return;
             }
@@ -63,12 +61,12 @@ public class Node implements INode {
         for (int i = 0; i < 26; i++) {
             Node child = this.children[i];
             if (child != null) {
-                child.generateString(stringVector, word + (char) ('a' + i));
+                child.generateString(stringBuilder, word + (char) ('a' + i));
             }
         }
     }
 
-    public boolean equals(Node otherNode) {
+    public boolean equalsHelper(Node otherNode) {
         for (int i = 0; i < 26; i++) {
             Node child = this.children[i];
             Node otherChild = otherNode.children[i];
@@ -78,7 +76,7 @@ public class Node implements INode {
                 if (child.getValue() != otherChild.getValue()) {
                     return false;
                 }
-                if (!child.equals(otherChild)) {
+                if (!child.equalsHelper(otherChild)) {
                     return false;
                 }
             }
